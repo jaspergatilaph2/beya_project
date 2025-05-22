@@ -1,0 +1,9 @@
+#chartContainer {
+    max-width: 1100px;
+    height: 500px;
+}   
+
+#myChart {
+    width: 100% !important;
+    height: 100% !important;
+}
