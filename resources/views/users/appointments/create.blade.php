@@ -68,11 +68,7 @@
                                 <div data-i18n="Without navbar">View My Pets</div>
                             </a>
                         </li>
-                        <li class="menu-item">
-                            <a href="" class="menu-link">
-                                <div data-i18n="Without navbar">List My Pets</div>
-                            </a>
-                        </li>
+
                     </ul>
                 </li>
                 </li>
@@ -113,7 +109,7 @@
                     </a>
                     <ul class="menu-sub">
                         <li class="menu-item">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('user.logs.logs') }}" class="menu-link">
                                 <div data-i18n="Under Maintenance">Logs</div>
                             </a>
                         </li>
@@ -204,7 +200,13 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="">
+                                    <a class="dropdown-item" href="{{ route('user.accounts.edit', ['id' => auth()->user()->id]) }}">
+                                        <i class="menu-icon bx bx-edit-alt"></i>
+                                        <span class="align-middle">Update Accounts</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('user.logs.logs') }}">
                                         <i class="menu-icon tf-icons bx bx-file"></i>
                                         <span class="align-middle">Logs</span>
                                     </a>

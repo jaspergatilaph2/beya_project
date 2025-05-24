@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Appointments;
 use Illuminate\Support\Facades\DB;
+use App\Models\Logs;
 
 class Admincontroller extends Controller
 {
@@ -53,6 +54,10 @@ class Admincontroller extends Controller
         $user->email = $request->email;
         $user->save();
 
+        Logs::create([
+            'user_id' => Auth::id(),
+            'description' => 'Updated account information for user: ' . $user->name,
+        ]);
         return redirect()->back()->with('success', 'Account updated successfully.');
     }
 
@@ -61,6 +66,11 @@ class Admincontroller extends Controller
     {
         // Fetch all appointments (you can add filters or eager loading if needed)
         $appointments = Appointments::all();
+
+        Logs::create([
+            'user_id' => Auth::id(),
+            'description' => 'Viewed appointments report.',
+        ]);
 
         // Return view with appointments data
         return view('admin.dashboard.home', compact('appointments'));

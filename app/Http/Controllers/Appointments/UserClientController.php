@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Appointments;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Appointments;
+use App\Models\Logs;
 use Illuminate\Support\Facades\Auth;
 
 class UserClientController extends Controller
@@ -44,7 +45,7 @@ class UserClientController extends Controller
         }
 
         // Create appointment
-        Appointments::create([
+        $appointment = Appointments::create([
             'user_id' => auth()->id(),
             'owner_name' => $validated['owner_name'],
             'pet_name' => $validated['pet_name'],
@@ -54,6 +55,12 @@ class UserClientController extends Controller
             'upload_document' => $uploadDocPath,
             'pets_picture' => $petsPicturePath,
             'reason' => $validated['reason'],
+        ]);
+
+        Logs::create([
+            'user_id' => auth()->id(),
+            'appointment_id' => $appointment->id,
+            'description' => 'Booked a new appointment for pet: ' . $validated['pet_name'],
         ]);
 
         return back()->with('success', 'Appointment booked successfully.');
@@ -97,6 +104,12 @@ class UserClientController extends Controller
 
         $appointment->update($validated);
 
+        Logs::create([
+            'user_id' => auth()->id(),
+            'appointment_id' => $appointment->id,
+            'description' => 'Updated appointment for pet: ' . $validated['pet_name'],
+        ]);
+
         return redirect()->back()->with('success', 'Appointment updated successfully.');
     }
 
@@ -107,6 +120,21 @@ class UserClientController extends Controller
             'ActiveTab' => 'pets',
             'SubActiveTab' => 'viewPets',
             'appointments' => $appointments,
+        ]);
+    }
+
+
+    public function logs()
+    {
+        // Retrieve and paginate user logs for pagination support in the view
+        $logs = Logs::where('user_id', auth()->id())
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('users.logs.logs', [
+            'ActiveTab' => 'logs',
+            'SubActiveTab' => 'userLogs',
+            'logs' => $logs,
         ]);
     }
 }

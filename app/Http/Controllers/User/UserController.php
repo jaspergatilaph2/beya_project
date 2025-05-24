@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Logs;
 
 class UserController extends Controller
 {
@@ -57,6 +58,10 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->save();
 
+        Logs::create([
+            'user_id' => $user->id,
+            'description' => $user->name . '" updated their account information.',
+        ]);
         return redirect()->back()->with('success', 'Account updated successfully.');
     }
 }

@@ -1,4 +1,8 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
+
+@php
+use App\Models\logs;
+@endphp
 
 @section('content')
 <div class="layout-wrapper layout-content-navbar">
@@ -7,11 +11,10 @@
 
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
             <div class="app-brand demo">
-                <a href="{{ route('home') }}" class="app-brand-link">
-                    <span class="app-brand-logo demo">
-                    </span>
+                <a href="{{ route('user.dashboard') }}" class="app-brand-link">
+                    <span class="app-brand-logo demo"></span>
                     <img src="{{asset('icons/icons8-veterinarian-100.png')}}" alt="" style="width: 50px;">
-                    <span class="app-brand-text demo menu-text fw-bolder ms-2" style="text-transform:uppercase">VCMS</span>
+                    <span class="app-brand-text demo menu-text fw-bolder ms-2" style="text-transform:uppercase">SLSU</span>
                 </a>
 
                 <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -24,32 +27,14 @@
             <ul class="menu-inner py-1">
                 <!-- Dashboard -->
                 <li class="menu-item">
-                    <a href="{{ route('home') }}" class="menu-link">
+                    <a href="{{ route('user.dashboard') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-home-circle"></i>
                         <div data-i18n="Analytics">Dashboard</div>
                     </a>
                 </li>
 
                 <!-- Layouts -->
-                <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon fa-solid fa-paw"></i>
-                        <div data-i18n="Layouts">Pets</div>
-                    </a>
 
-                    <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a href="{{route('admin.pets.show')}}" class="menu-link">
-                                <div data-i18n="Without menu">List Pets</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="{{route('admin.pets.medical')}}" class="menu-link">
-                                <div data-i18n="Without navbar">Medical History</div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon fa-regular fa-calendar"></i>
@@ -58,44 +43,49 @@
 
                     <ul class="menu-sub">
                         <li class="menu-item">
-                            <a href="{{ route('maintenance') }}" class="menu-link">
+                            <a href="{{ route('user.maintenance') }}" class="menu-link">
                                 <div data-i18n="Without menu">Appointment Calendar</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a href="{{ route('admin.appointments.show') }}" class="menu-link">
+                            <a href="{{route('user.appointments.show')}}" class="menu-link">
+                                <div data-i18n="Without navbar">Book An Appointments</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="{{route('user.appointments.view')}}" class="menu-link">
                                 <div data-i18n="Without navbar">View Appointments</div>
                             </a>
                         </li>
                     </ul>
-                </li>
 
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon fa-solid fa-user"></i>
-                        <div data-i18n="Layouts">Owners</div>
+                        <i class="menu-icon fa-solid fa-shield-dog"></i>
+                        <div data-i18n="Layouts">My Pets</div>
                     </a>
 
                     <ul class="menu-sub">
                         <li class="menu-item">
-                            <a href="{{ route('admin.owners.show', ['id' => auth()->user()->id]) }}" class="menu-link">
-                                <div data-i18n="Without navbar">View Owners</div>
+                            <a href="{{ route('user.pets.view', ['id' => auth()->user()->id]) }}" class="menu-link">
+                                <div data-i18n="Without navbar">View My Pets</div>
                             </a>
                         </li>
                     </ul>
+                </li>
                 </li>
 
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Accounts</span>
                 </li>
-                <li class="menu-item {{$ActiveTab === 'accounts' ? 'active' : ''}}">
+                <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons bx bx-dock-top"></i>
                         <div data-i18n="Account Settings">Account Settings</div>
                     </a>
                     <ul class="menu-sub">
                         <li class="menu-item">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('user.accounts.show') }}" class="menu-link">
                                 <div data-i18n="Account">Account</div>
                             </a>
                         </li>
@@ -104,21 +94,24 @@
                                 <div data-i18n="Notifications">Settings</div>
                             </a>
                         </li>
-                        <li class="menu-item {{ $SubActiveTab  === 'edit' ? 'active' : ''}}">
-                            <a href="" class="menu-link">
+                        <li class="menu-item">
+                            <a href="{{ route('user.accounts.edit') }}" class="menu-link">
                                 <div data-i18n="Notifications">Update Account</div>
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="menu-item">
+                <li class="menu-header small text-uppercase">
+                    <span class="menu-header-text">Misc</span>
+                </li>
+                <li class="menu-item {{ $ActiveTab === 'logs' ? 'active' : '' }}">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons bx bx-file"></i>
                         <div data-i18n="Misc">Misc</div>
                     </a>
                     <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a href="{{ route('admin.logs.logs') }}" class="menu-link">
+                        <li class="menu-item {{ $SubActiveTab === 'userLogs' ? 'active' : '' }}">
+                            <a href="" class="menu-link">
                                 <div data-i18n="Under Maintenance">Logs</div>
                             </a>
                         </li>
@@ -142,17 +135,6 @@
                 </div>
 
                 <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                    <!-- Search -->
-                    <div class="navbar-nav align-items-center">
-                        <div class="nav-item d-flex align-items-center">
-                            <!-- <i class="bx bx-search fs-4 lh-0"></i>
-              <input type="text" class="form-control border-0 shadow-none" placeholder="Search..."
-                aria-label="Search..." /> -->
-                        </div>
-
-                    </div>
-                    <!-- /Search -->
-
                     <ul class="navbar-nav flex-row align-items-center ms-auto">
                         <!-- Place this tag where you want the button to render. -->
                         <!--  -->
@@ -160,10 +142,9 @@
                         <li class="nav-item navbar-dropdown dropdown-user dropdown">
                             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                                 <div class="avatar avatar-online">
-                                    <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('sneat/img/avatars/1.png') }}" alt
+                                    <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt
                                         class="w-px-120 h-px-120 rounded-circle" />
                                 </div>
-
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
@@ -171,10 +152,9 @@
                                         <div class="d-flex">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar avatar-online">
-                                                    <img src="{{ auth()->user()->avatar ? asset('storage/' . auth()->user()->avatar) : asset('sneat/img/avatars/1.png') }}" alt
+                                                    <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt
                                                         class="w-px-120 h-px-120 rounded-circle" />
                                                 </div>
-
                                             </div>
                                             <div class="flex-grow-1">
                                                 <span class="fw-semibold d-block">{{ Auth::user()->name }}</span>
@@ -188,25 +168,25 @@
                                     <div class="dropdown-divider"></div>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="{{ route('user.accounts.show') }}">
                                         <i class="bx bx-user me-2"></i>
                                         <span class="align-middle">My Profile</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="">
+                                    <a class="dropdown-item" href="{{ route('maintenance') }}">
                                         <i class="bx bx-cog me-2"></i>
                                         <span class="align-middle">Settings</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="{{route('admin.accounts.edit')}}">
+                                    <a class="dropdown-item" href="{{ route('user.accounts.edit', ['id' => auth()->user()->id]) }}">
                                         <i class="menu-icon bx bx-edit-alt"></i>
                                         <span class="align-middle">Update Accounts</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="">
+                                    <a class="dropdown-item" href="{{ route('user.logs.logs') }}">
                                         <i class="menu-icon tf-icons bx bx-file"></i>
                                         <span class="align-middle">Logs</span>
                                     </a>
@@ -237,72 +217,52 @@
             <div class="content-wrapper">
                 <!-- Content -->
                 <div class="container-xxl flex-grow-1 container-p-y">
-                    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Account Settings /</span> Account</h4>
+                    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Logs /</span>History</h4>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <ul class="nav nav-pills flex-column flex-md-row mb-3">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Account</a>
-                                </li>
-                            </ul>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Logs History</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Description</th>
+                                            <th>Date Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php $counter = ($logs->currentPage() - 1) * $logs->perPage() + 1; @endphp
+                                        @forelse($logs as $log)
+                                        <tr>
+                                            <td>{{ $counter++ }}</td>
+                                            <td>{{ $log->description }}</td>
+                                            <td>{{ $log->created_at->setTimezone(config('app.timezone'))->format('Y-m-d h:i A') }}</td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="3" class="text-center text-muted">No logs found.</td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
 
-                            <div class="card mb-4">
-                                <h5 class="card-header">Profile Details</h5>
-                                <!-- Account -->
-                                <hr class="my-0" />
-
-                                <!-- Display Success Message -->
-                                @if(session('success'))
-                                <div class="alert alert-success">
-                                    {{ session('success') }}
-                                </div>
-                                @endif
-
-                                <div class="card-body">
-                                    <!-- Display validation errors -->
-                                    @if ($errors->any())
-                                    <div class="alert alert-danger">
-                                        <ul>
-                                            @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                    @endif
-
-                                    <!-- Profile Update Form -->
-                                    <form action="{{ route('admin.accounts.update', $user->id) }}" method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        @method('PUT') <!-- Overriding the method to PUT -->
-
-                                        <div class="mb-3">
-                                            <label for="name" class="form-label">Name</label>
-                                            <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name) }}" required>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="email" class="form-label">Email</label>
-                                            <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email) }}" required>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="avatar" class="form-label">Profile Picture</label>
-                                            <input type="file" id="avatarInput" name="avatar" class="form-control mt-2" accept="image/*">
-                                            <img id="uploadedAvatar"
-                                                src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('sneat/img/avatars/1.png') }}"
-                                                alt="avatar" class="d-block rounded mt-2" width="100" height="100" />
-                                        </div>
-
-                                        <button type="submit" class="btn btn-primary">Update Profile</button>
-                                    </form>
-                                </div>
+                            <!-- Pagination Links -->
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $logs->links('pagination::bootstrap-4') }}
                             </div>
                         </div>
                     </div>
+
                 </div>
-                <!-- Content wrapper -->
             </div>
+
+            <!-- / Content -->
+
+            <!-- Footer -->
             <footer class="content-footer footer bg-footer-theme">
                 <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
                     <div class="mb-2 mb-md-0">
@@ -325,11 +285,11 @@
                     </div>
                 </div>
             </footer>
-            <!-- / Layout page -->
+            <!-- / Footer -->
         </div>
-
-        <!-- Overlay -->
-        <div class="layout-overlay layout-menu-toggle"></div>
+        <!-- / Content wrapper -->
     </div>
-    <!-- / Layout wrapper -->
-    @endsection
+    <!-- / Layout container -->
+</div>
+</div>
+@endsection

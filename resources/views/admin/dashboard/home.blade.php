@@ -119,7 +119,7 @@
           </a>
           <ul class="menu-sub">
             <li class="menu-item">
-              <a href="" class="menu-link">
+              <a href="{{ route('admin.logs.logs') }}" class="menu-link">
                 <div data-i18n="Under Maintenance">Logs</div>
               </a>
             </li>

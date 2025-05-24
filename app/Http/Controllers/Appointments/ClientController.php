@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Appointments;
 
 use App\Http\Controllers\Controller;
 use App\Models\Appointments;
+use App\Models\Logs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 
@@ -41,7 +42,6 @@ class ClientController extends Controller
         $appointment->delete();
 
         return redirect()->back()->with('success', 'Appointment deleted successfully.');
-
     }
 
     public function list()
@@ -60,6 +60,20 @@ class ClientController extends Controller
         return view('admin.owners.view', [
             'appointments' => $appointments,
             'ActiveTab' => 'owners',
+            'SubActiveTab' => 'list',
+        ]);
+    }
+
+    public function logs()
+    {
+        // Get all logs, paginated (adjust perPage as needed)
+        $logs = Logs::with(['user', 'appointment'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('admin.logs.logs', [
+            'logs' => $logs,
+            'ActiveTab' => 'logs',
             'SubActiveTab' => 'list',
         ]);
     }

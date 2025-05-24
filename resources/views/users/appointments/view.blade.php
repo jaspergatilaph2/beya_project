@@ -11,7 +11,7 @@
                     <span class="app-brand-logo demo">
                     </span>
                     <img src="{{asset('icons/icons8-veterinarian-100.png')}}" alt="" style="width: 50px;">
-                    <span class="app-brand-text demo menu-text fw-bolder ms-2" style="text-transform:uppercase">slsu</span>
+                    <span class="app-brand-text demo menu-text fw-bolder ms-2" style="text-transform:uppercase">VCMS</span>
                 </a>
 
                 <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -68,11 +68,7 @@
                                 <div data-i18n="Without navbar">View My Pets</div>
                             </a>
                         </li>
-                        <li class="menu-item">
-                            <a href="" class="menu-link">
-                                <div data-i18n="Without navbar">List My Pets</div>
-                            </a>
-                        </li>
+
                     </ul>
                 </li>
                 </li>
@@ -113,7 +109,7 @@
                     </a>
                     <ul class="menu-sub">
                         <li class="menu-item">
-                            <a href="" class="menu-link">
+                            <a href="{{ route('user.logs.logs') }}" class="menu-link">
                                 <div data-i18n="Under Maintenance">Logs</div>
                             </a>
                         </li>
@@ -189,7 +185,13 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="">
+                                    <a class="dropdown-item" href="{{ route('user.accounts.edit', ['id' => auth()->user()->id]) }}">
+                                        <i class="menu-icon bx bx-edit-alt"></i>
+                                        <span class="align-middle">Update Accounts</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('user.logs.logs') }}">
                                         <i class="menu-icon tf-icons bx bx-file"></i>
                                         <span class="align-middle">Logs</span>
                                     </a>

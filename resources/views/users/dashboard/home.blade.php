@@ -69,11 +69,6 @@
                 <div data-i18n="Without navbar">View My Pets</div>
               </a>
             </li>
-            <li class="menu-item">
-              <a href="" class="menu-link">
-                <div data-i18n="Without navbar">List My Pets</div>
-              </a>
-            </li>
           </ul>
         </li>
         </li>
@@ -114,7 +109,7 @@
           </a>
           <ul class="menu-sub">
             <li class="menu-item">
-              <a href="" class="menu-link">
+              <a href="{{ route('user.logs.logs') }}" class="menu-link">
                 <div data-i18n="Under Maintenance">Logs</div>
               </a>
             </li>
