@@ -40,7 +40,8 @@ class ClientController extends Controller
         $appointment = Appointments::findOrFail($id);
         $appointment->delete();
 
-        return redirect()->with('success', 'Appointment deleted successfully.');
+        return redirect()->back()->with('success', 'Appointment deleted successfully.');
+
     }
 
     public function list()

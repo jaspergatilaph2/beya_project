@@ -7,14 +7,14 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Advance Medical Health Management System</title>
+    <title>Veterinary Clinic Management System</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <!-- Links -->
-    <link rel="icon" type="image/x-icon" href="{{asset('storage/images/Adobe Express - file.png')}}" />
+    <link rel="icon" type="image/x-icon" href="{{asset('icons/icons8-veterinarian-100.png')}}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <!-- Fonts -->

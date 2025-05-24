@@ -253,7 +253,7 @@
                                     <small class="text-muted float-end">Fill in the details to book</small>
                                 </div>
                                 <div class="card-body">
-                                    <form method="POST" action="{{ route('user.appointments.store') }}" enctype="multipart/form-data"> 
+                                    <form method="POST" action="{{ route('user.appointments.store') }}" enctype="multipart/form-data">
                                         @csrf
                                         @if ($errors->any())
                                         <div class="alert alert-danger">
@@ -310,10 +310,16 @@
                                         <!-- Appointment Date -->
                                         <div class="mb-3">
                                             <label class="form-label" for="appointment-date">Appointment Date</label>
-                                            <input type="date" class="form-control" id="appointment-date" name="appointment_date" required />
+                                            <input
+                                                type="date"
+                                                class="form-control"
+                                                id="appointment-date"
+                                                name="appointment_date"
+                                                required
+                                                min="{{ \Carbon\Carbon::now()->toDateString() }}" />
                                         </div>
 
-                                        
+
                                         <!-- Upload Document -->
                                         <div class="mb-3">
                                             <label class="form-label" for="upload-document">Upload the medical Records</label>

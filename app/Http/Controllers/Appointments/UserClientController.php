@@ -26,38 +26,39 @@ class UserClientController extends Controller
             'pet_name' => 'required|string|max:255',
             'contact_number' => 'required|digits:11',
             'pet_breed' => 'required|string',
-            'appointment_date' => 'required|date',
+            'appointment_date' => 'required|date|after_or_equal:today', // ✅ updated this line
             'upload_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'pets_picture' => 'nullable|image|max:2048',
             'reason' => 'required|string',
         ]);
 
         // Handle file upload
-        $filePath = null;
+        $uploadDocPath = null;
         if ($request->hasFile('upload_document')) {
-            $filePath = $request->file('upload_document')->store('medical_records', 'public');
+            $uploadDocPath = $request->file('upload_document')->store('medical_records', 'public');
         }
 
+        $petsPicturePath = null;
         if ($request->hasFile('pets_picture')) {
-            $filePath = $request->file('pets_picture')->store('pets', 'public');
+            $petsPicturePath = $request->file('pets_picture')->store('pets', 'public');
         }
 
         // Create appointment
         Appointments::create([
-            'user_id' => auth()->id(), // ✅ Add this line
-
+            'user_id' => auth()->id(),
             'owner_name' => $validated['owner_name'],
             'pet_name' => $validated['pet_name'],
             'contact_number' => $validated['contact_number'],
             'pet_breed' => $validated['pet_breed'],
             'appointment_date' => $validated['appointment_date'],
-            'upload_document' => $filePath,
-            'pets_picture' => $filePath,
+            'upload_document' => $uploadDocPath,
+            'pets_picture' => $petsPicturePath,
             'reason' => $validated['reason'],
         ]);
 
         return back()->with('success', 'Appointment booked successfully.');
     }
+
 
     public function viewAppointments()
     {

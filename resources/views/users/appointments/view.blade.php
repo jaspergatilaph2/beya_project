@@ -274,7 +274,15 @@
                                             <td>{{ ucfirst($appointment->status) }}</td>
                                             <td>
                                                 @if($appointment->upload_document)
+                                                @php
+                                                $extension = pathinfo($appointment->upload_document, PATHINFO_EXTENSION);
+                                                @endphp
+
+                                                @if(in_array(strtolower($extension), ['jpg', 'jpeg', 'png']))
                                                 <img src="{{ asset('storage/' . $appointment->upload_document) }}" alt="Document Image" style="max-width: 100px; height: auto;" class="rounded border">
+                                                @else
+                                                <a href="{{ asset('storage/' . $appointment->upload_document) }}" target="_blank">View Document</a>
+                                                @endif
                                                 @else
                                                 No Document
                                                 @endif
